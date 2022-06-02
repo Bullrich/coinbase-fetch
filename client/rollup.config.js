@@ -6,8 +6,11 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
+import replace from '@rollup/plugin-replace';
 
 const production = !process.env.ROLLUP_WATCH;
+
+const apiUrl = process.env.BACKEND
 
 function serve() {
 	let server;
@@ -45,6 +48,9 @@ export default {
 				// enable run-time checks when not in production
 				dev: !production
 			}
+		}),
+		replace({
+			'process.env.backendUrl': `"${apiUrl}"`
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance

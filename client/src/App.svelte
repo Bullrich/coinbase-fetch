@@ -1,10 +1,27 @@
 <script lang="ts">
+	import { fetchAccounts } from "./api/fetch";
+import Account from "./components/Account.svelte";
+
 	export let name: string;
+
+	const accountsPromise = fetchAccounts();
 </script>
 
 <main>
 	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<p>
+		Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
+		how to build Svelte apps.
+	</p>
+	{#await accountsPromise}
+		<p>Fetching accounts</p>
+	{:then accounts}
+	{#each accounts as account}
+		<Account account={account}/>
+		{/each}
+	{:catch error}
+		<p style="color: red">{error.message}</p>
+	{/await}
 </main>
 
 <style>
