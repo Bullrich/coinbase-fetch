@@ -15,19 +15,20 @@ app.get("/", (req, res) => {
 const api = new CoinbaseApi();
 
 app.get("/accounts", async (req, res) => {
-    api.getUser().then(r => {
+    api.getAccounts().then(r => {
         console.log("result", r);
-        res.send({id:r.id, name:r.name});
+        res.send(r);
+        // res.send({id:r.id, name:r.name});
     }).catch((e) => {
         console.error("ERROR", e);
         res.send(e)
     });
 });
 
-app.get("/transactions", async(req,res)=>{
-    api.getTransactions().then(r => {
+app.get("/transactions/:account", async(req,res)=>{
+    api.getTransactions(req.params.account).then(r => {
         console.log("result", r);
-        res.send({id:r.id, name:r.name});
+        res.send(r);
     }).catch((e) => {
         console.error("ERROR", e);
         res.send(e);
