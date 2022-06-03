@@ -8,9 +8,7 @@ const app = express();
 
 app.use(cors());
 
-app.get("/", (req, res) => {
-    res.send("GET request to the homepage")
-});
+app.use("/", express.static("./client/public"));
 
 const api = new CoinbaseApi();
 
