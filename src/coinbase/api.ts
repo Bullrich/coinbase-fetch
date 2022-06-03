@@ -1,5 +1,5 @@
 import { coinbaseRequest } from "./request";
-import { Account, Operation, UserTransactions } from "./types";
+import { Account, Operation, Transaction, UserTransactions } from "./types";
 
 export class CoinbaseApi {
     public async getAccounts(): Promise<Account[]> {
@@ -12,7 +12,7 @@ export class CoinbaseApi {
         return data.data.data;
     }
 
-    public async getTransactions(account:string) {
+    public async getTransactions(account:string) : Promise<Transaction[]> {
         const data = await coinbaseRequest(`/v2/accounts/${account}/transactions`);
         return data.data.data;
     }

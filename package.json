@@ -12,7 +12,8 @@
     "lint": "eslint --ext .js,.ts .",
     "export-types": "cp src/coinbase/types.ts client/src/config/coinbaseTypes.ts",
     "postinstall": "npm install --prefix client",
-    "prebuild": "npm run build --prefix client"
+    "prebuild": "npm run build --prefix client",
+    "test": "echo 'no tests yet'"
   },
   "repository": {
     "type": "git",

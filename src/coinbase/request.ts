@@ -2,6 +2,7 @@ import axios from "axios";
 import crypto from "crypto";
 import credentials from "../config";
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const coinbaseRequest = async (path:string) => {
     const {key, secret} = credentials;
 
