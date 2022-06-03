@@ -1,27 +1,52 @@
 <script lang="ts">
-	import { fetchAccounts } from "./api/fetch";
-import Account from "./components/Account.svelte";
+	import { Col, Container, Row } from "sveltestrap";
+	import { fetchAccounts, fetchUser } from "./api/fetch";
+	import Account from "./components/Account.svelte";
 
-	export let name: string;
+	const userPromise = fetchUser();
 
-	const accountsPromise = fetchAccounts();
+	async function fetchAndOrderAccounts() {
+		const accounts = await fetchAccounts();
+		return accounts.sort((a, b) => {
+			if (a.balance.amount === b.balance.amount) {
+				return a.name > b.name ? 1 : -1;
+			}
+			return b.balance.amount > a.balance.amount ? 1 : -1
+		}
+		);
+	}
+
+	const accountsPromise = fetchAndOrderAccounts();
 </script>
 
+<svelte:head>
+	<link
+		rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+	/>
+</svelte:head>
+
 <main>
-	<h1>Hello {name}!</h1>
-	<p>
-		Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
-		how to build Svelte apps.
-	</p>
-	{#await accountsPromise}
-		<p>Fetching accounts</p>
-	{:then accounts}
-	{#each accounts as account}
-		<Account account={account}/>
-		{/each}
-	{:catch error}
-		<p style="color: red">{error.message}</p>
-	{/await}
+	<Container>
+		{#await userPromise then user}
+			<h1>Hello {user.name}!</h1>
+		{/await}
+		{#await accountsPromise}
+			<p>Fetching accounts</p>
+		{:then accounts}
+			<Row>
+				{#each accounts as account}
+					<Col sm={4}>
+						<div class="account-data">
+							<Account {account} />
+						</div>
+					</Col>
+				{/each}
+			</Row>
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}
+	</Container>
 </main>
 
 <style>
@@ -43,5 +68,9 @@ import Account from "./components/Account.svelte";
 		main {
 			max-width: none;
 		}
+	}
+
+	.account-data {
+		margin-bottom: 20px;
 	}
 </style>

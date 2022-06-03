@@ -12,26 +12,50 @@ app.use("/", express.static("./client/public"));
 
 const api = new CoinbaseApi();
 
-app.get("/accounts", async (req, res) => {
+app.get("/accounts", async (_, res, next) => {
     api.getAccounts().then(r => {
-        console.log("result", r);
         res.send(r);
-        // res.send({id:r.id, name:r.name});
     }).catch((e) => {
         console.error("ERROR", e);
-        res.send(e)
+        next(e);
     });
 });
 
-app.get("/transactions/:account", async(req,res)=>{
+app.get("/transactions/:account", async (req, res, next) => {
     api.getTransactions(req.params.account).then(r => {
-        console.log("result", r);
         res.send(r);
     }).catch((e) => {
         console.error("ERROR", e);
-        res.send(e);
+        next(e);
     });
 })
+
+app.get("/withdrawals/:account", async (req, res, next) => {
+    api.getWithdrawals(req.params.account).then(r => {
+        res.send(r);
+    }).catch((e) => {
+        console.error("ERROR", e);
+        next(e);
+    });
+});
+
+app.get("/collection/:account", async (req, res, next) => {
+    api.getAccountTransactions(req.params.account).then(r => {
+        res.send(r);
+    }).catch((e) => {
+        console.error("ERROR", e);
+        next(e);
+    });
+});
+
+app.get("/user", async (_, res, next) => {
+    api.getUser().then(r => {
+        res.send(r);
+    }).catch((e) => {
+        console.error("ERROR", e);
+        next(e);
+    });
+});
 
 const port = process.env.PORT || 4000;
 
