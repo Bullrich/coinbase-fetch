@@ -8,7 +8,7 @@
     export let accounts: Account[];
     const balances = accounts
         .map((bals) => bals.balance)
-        .sort((a, b) => (to_number(a.amount) > to_number(b.amount) ? 1 : -1));
+        .sort((a, b) => (a.amount > b.amount ? -1 : 1));
 
     const exportBalances = () => exportToJsonFile("balances.json", balances);
 </script>
