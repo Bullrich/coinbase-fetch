@@ -11,6 +11,7 @@
         ModalHeader,
         Spinner,
     } from "sveltestrap";
+    import { exportToJsonFile } from "../api/export";
     import { fetchAccountTransactions as fetchTransactions } from "../api/fetch";
     import type { Account, UserTransactions } from "../config/coinbaseTypes";
     import Transactions from "./Transactions.svelte";
@@ -53,6 +54,17 @@
                     Loading transactions <br /><Spinner />
                 {:then tx}
                     <Transactions transactions={tx} />
+                    <hr />
+                    <Button
+                        color="primary"
+                        on:click={() =>
+                            exportToJsonFile(
+                                `${account.name}.json`,
+                                tx
+                            )}
+                    >
+                        Save as JSON
+                    </Button>
                 {:catch error}
                     <p style="color: red">{error.message}</p>
                 {/await}
