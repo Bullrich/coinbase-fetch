@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Col, Container, Row } from "sveltestrap";
+	import { Col, Container, Row, TabContent, TabPane } from "sveltestrap";
 	import { fetchAccounts, fetchUser } from "./api/fetch";
 	import Account from "./components/Account.svelte";
+	import Balances from "./components/Balances.svelte";
 
 	const userPromise = fetchUser();
 
@@ -11,9 +12,8 @@
 			if (a.balance.amount === b.balance.amount) {
 				return a.name > b.name ? 1 : -1;
 			}
-			return b.balance.amount > a.balance.amount ? 1 : -1
-		}
-		);
+			return b.balance.amount > a.balance.amount ? 1 : -1;
+		});
 	}
 
 	const accountsPromise = fetchAndOrderAccounts();
@@ -34,15 +34,26 @@
 		{#await accountsPromise}
 			<p>Fetching accounts</p>
 		{:then accounts}
-			<Row>
-				{#each accounts as account}
-					<Col sm={4}>
-						<div class="account-data">
-							<Account {account} />
-						</div>
-					</Col>
-				{/each}
-			</Row>
+			<TabContent>
+				<TabPane tabId="accounts" tab="Accounts" active>
+					<div class="tab-content">
+						<Row>
+							{#each accounts as account}
+								<Col sm={4}>
+									<div class="account-data">
+										<Account {account} />
+									</div>
+								</Col>
+							{/each}
+						</Row>
+					</div>
+				</TabPane>
+				<TabPane tabId="balances" tab="Balances">
+					<div class="tab-content">
+						<Balances {accounts} />
+					</div>
+				</TabPane>
+			</TabContent>
 		{:catch error}
 			<p style="color: red">{error.message}</p>
 		{/await}
@@ -72,5 +83,9 @@
 
 	.account-data {
 		margin-bottom: 20px;
+	}
+
+	.tab-content {
+		margin-top: 10px;
 	}
 </style>
