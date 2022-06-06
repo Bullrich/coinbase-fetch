@@ -11,7 +11,7 @@ interface Amount {
     currency: string
 }
 
-// Interfaced shared between buys, sells, withdrawals and deposits
+// Interface shared between buys, sells, withdrawals and deposits
 export interface Operation {
     id: string;
     status: "created" | "completed" | "cancelled";
