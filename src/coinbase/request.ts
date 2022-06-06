@@ -4,7 +4,7 @@ import credentials from "../config";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const coinbaseRequest = async (path:string) => {
-    const {key, secret} = credentials;
+    const {key, secret} = credentials();
 
     //get unix time in seconds
     const timestamp = Math.floor(Date.now() / 1000);

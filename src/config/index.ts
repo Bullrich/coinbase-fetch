@@ -1,18 +1,26 @@
+type Credentials = { key: string, secret: string };
 
-const apiKey = process.env.COINBASE_KEY;
+let credentials: Credentials;
 
-if (!apiKey) {
-    throw new Error("COINBASE_KEY has not been set");
+export default function fetchCredentials(): Credentials {
+    if (credentials) {
+        return credentials;
+    }
+    const apiKey = process.env.COINBASE_KEY;
+
+    if (!apiKey) {
+        throw new Error("COINBASE_KEY has not been set");
+    }
+    const apiSecret = process.env.COINBASE_SECRET;
+
+    if (!apiSecret) {
+        throw new Error("COINBASE_SECRET has not been set");
+    }
+
+    credentials = {
+        key: apiKey,
+        secret: apiSecret
+    };
+
+    return credentials;
 }
-const apiSecret = process.env.COINBASE_SECRET;
-
-if (!apiSecret) {
-    throw new Error("COINBASE_SECRET has not been set");
-}
-
-const credentials = {
-    key: apiKey,
-    secret: apiSecret
-};
-
-export default credentials;
